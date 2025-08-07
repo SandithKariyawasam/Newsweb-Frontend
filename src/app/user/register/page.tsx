@@ -100,7 +100,7 @@ export default function AdminRegister() {
 
           <button
             type="submit"
-            className="w-full bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-red-600 transition disabled:opacity-50"
+            className="w-full bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-red-600 transition"
             disabled={!captchaToken}
           >
             Register
