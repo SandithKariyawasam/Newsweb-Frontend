@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import ReCAPTCHA from 'react-google-recaptcha';
 
-export default function AdminLogin() {
+export default function AdminRegister() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
@@ -13,7 +13,7 @@ export default function AdminLogin() {
   const recaptchaRef = useRef<ReCAPTCHA>(null);
   const router = useRouter();
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!captchaToken) {
@@ -22,25 +22,27 @@ export default function AdminLogin() {
     }
 
     try {
-      const response = await axios.post('http://localhost:8070/users/login', {
+      const response = await axios.post('http://localhost:8070/users/register', {
         username,
         password,
-        captchaToken, // send CAPTCHA token to backend
+        captchaToken,
       });
 
       if (response.status === 200) {
-        localStorage.setItem('token', 'your-token'); // Replace with actual token
-        router.push('/user/home');
+        // Optionally show success message here
+        router.push('/'); // Redirect to login page
       }
-    } catch (error) {
-      setError('Invalid username, password, or CAPTCHA');
-      recaptchaRef.current?.reset(); // reset CAPTCHA
+    } catch (error: any) {
+      setError(
+        error.response?.data?.message || 'Registration failed. Please try again.'
+      );
+      recaptchaRef.current?.reset(); // Reset CAPTCHA on failure
       setCaptchaToken(null);
     }
   };
 
-  const handleRegister = () => {
-    router.push('/user/register');
+  const handleLoginRedirect = () => {
+    router.push('/');
   };
 
   return (
@@ -53,13 +55,15 @@ export default function AdminLogin() {
       }}
     >
       <div className="max-w-md w-full p-8 bg-white rounded-lg shadow-md">
-        <h1 className="text-3xl font-bold text-center mb-6">User Login</h1>
-        <form onSubmit={handleLogin} className="space-y-4">
+        <h1 className="text-3xl font-bold text-center mb-6">User Register</h1>
+
+        <form onSubmit={handleRegister} className="space-y-4">
           {error && (
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded">
               {error}
             </div>
           )}
+
           <div>
             <label htmlFor="username" className="block text-sm font-medium text-gray-700">
               Username
@@ -73,6 +77,7 @@ export default function AdminLogin() {
               required
             />
           </div>
+
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">
               Password
@@ -87,7 +92,6 @@ export default function AdminLogin() {
             />
           </div>
 
-          {/* Google reCAPTCHA */}
           <ReCAPTCHA
             sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
             onChange={(token) => setCaptchaToken(token)}
@@ -96,21 +100,22 @@ export default function AdminLogin() {
 
           <button
             type="submit"
+            className="w-full bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-red-600 transition disabled:opacity-50"
+            disabled={!captchaToken}
+          >
+            Register
+          </button>
+        </form>
+
+        <div className="flex flex-col items-center justify-center mt-6">
+          <p className="mb-4">If you already have an account, click below to log in:</p>
+          <button
+            onClick={handleLoginRedirect}
             className="w-full bg-blue-500 text-white px-4 py-3 rounded-md hover:bg-blue-600 transition duration-300"
           >
             Login
           </button>
-
-          <div className="flex flex-col items-center justify-center mt-6">
-            <p className="mb-4">If you don't have an account, click here</p>
-            <button
-              onClick={handleRegister}
-              className="w-full bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-red-600 transition"
-            >
-              Register
-            </button>
-          </div>
-        </form>
+        </div>
       </div>
     </div>
   );
