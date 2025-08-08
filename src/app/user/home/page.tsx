@@ -9,22 +9,30 @@ interface NewsItem {
   _id: string;
   title: string;
   content: string;
-  imageUrl: string; // Include imageUrl field
+  imageUrl: string;
+  createdAt: string;
 }
+
 
 export default function Home() {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [role, setRole] = useState<string | null>(null);  
+  const [role, setRole] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
-    // Fetch news on mount
     const fetchNews = async () => {
       try {
         const response = await axios.get('http://localhost:8070/news');
-        setNews(response.data);
+
+        // Sort by createdAt DESC so latest is first
+        const sortedNews = response.data.sort(
+          (a: NewsItem, b: NewsItem) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+
+        setNews(sortedNews);
       } catch (error) {
         console.error('Error fetching news:', error);
       }
@@ -32,10 +40,10 @@ export default function Home() {
 
     fetchNews();
 
-    // Get role from localStorage when component mounts
     const storedRole = localStorage.getItem('role');
     setRole(storedRole);
   }, []);
+
 
   const handleNewsClick = (newsItem: NewsItem) => {
     setSelectedNews(newsItem);
@@ -45,9 +53,15 @@ export default function Home() {
     setSelectedNews(null);
   };
 
-  const filteredNews = news.filter(item =>
-    item.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredNews = news
+    .filter(item =>
+      item.title.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -145,12 +159,27 @@ export default function Home() {
             )}
             <h2
               onClick={() => handleNewsClick(item)}
-              className="cursor-pointer text-2xl font-semibold mb-4 hover:text-blue-500 transition-colors"
+              className="cursor-pointer text-2xl font-semibold mb-1 hover:text-blue-500 transition-colors"
             >
               {item.title}
               <span className="inline-block transition-transform group-hover:translate-x-1 ml-2">-&gt;</span>
             </h2>
             <p className="text-gray-600 text-sm line-clamp-3">{item.content}</p>
+            <br/>
+            <p className="text-gray-500 text-xs mb-3">
+              Published on{' '}
+              {new Date(item.createdAt).toLocaleDateString(undefined, {
+                month: 'short',
+                day: 'numeric',
+              })}{' '}
+              at{' '}
+              {new Date(item.createdAt).toLocaleTimeString(undefined, {
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true,
+              })}
+            </p>
+            
           </div>
         ))}
       </div>
