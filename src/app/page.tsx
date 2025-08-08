@@ -29,8 +29,20 @@ export default function AdminLogin() {
       });
 
       if (response.status === 200) {
-        localStorage.setItem('token', 'your-token'); // Replace with actual token
-        router.push('/user/home');
+        const { token, role } = response.data;
+
+        // Save JWT token to localStorage (or wherever you store it)
+        localStorage.setItem('token', token);
+
+        // Optionally save role if you want to use it client-side
+        localStorage.setItem('role', role);
+
+        // Redirect based on role
+        if (role === 'admin') {
+          router.push('/user/home');  // example admin dashboard route
+        } else {
+          router.push('/user/home');         // example user homepage route
+        }
       }
     } catch (error) {
       setError('Invalid username, password, or CAPTCHA');
@@ -38,6 +50,7 @@ export default function AdminLogin() {
       setCaptchaToken(null);
     }
   };
+
 
   const handleRegister = () => {
     router.push('/user/register');
