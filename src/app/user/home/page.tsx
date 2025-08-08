@@ -12,15 +12,15 @@ interface NewsItem {
   imageUrl: string; // Include imageUrl field
 }
 
-// Home functional component
 export default function Home() {
-  const [news, setNews] = useState<NewsItem[]>([]); // State for news items
-  const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null); // State for selected news item
-  const [searchTerm, setSearchTerm] = useState<string>(''); // State for search term
-  const router = useRouter(); // useRouter for navigation
+  const [news, setNews] = useState<NewsItem[]>([]);
+  const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [role, setRole] = useState<string | null>(null);  
+  const router = useRouter();
 
-  // Fetch news items on component mount
   useEffect(() => {
+    // Fetch news on mount
     const fetchNews = async () => {
       try {
         const response = await axios.get('http://localhost:8070/news');
@@ -31,25 +31,24 @@ export default function Home() {
     };
 
     fetchNews();
+
+    // Get role from localStorage when component mounts
+    const storedRole = localStorage.getItem('role');
+    setRole(storedRole);
   }, []);
 
-
-  // Handle click on a news item to display full content in modal
   const handleNewsClick = (newsItem: NewsItem) => {
     setSelectedNews(newsItem);
   };
 
-  // Close modal displaying full news content
   const closeNews = () => {
     setSelectedNews(null);
   };
 
-  // Filter news based on search term
   const filteredNews = news.filter(item =>
     item.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Handle change in search input
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
   };
@@ -60,28 +59,33 @@ export default function Home() {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('role');   // Clear role on logout
     router.push('/');
   };
 
   return (
+    <main
+      className="relative flex min-h-screen flex-col items-center justify-center bg-gradient-to-r from-gray-100 to-white p-8"
+      style={{ backgroundImage: `url('/images/createbg.jpg')`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+    >
+      <div className="absolute top-4 right-4 flex items-center space-x-3">
+        {/* Show Dashboard button only if role is 'admin' */}
+        {role === 'admin' && (
+          <button
+            onClick={handleDashboard}
+            className="bg-blue-500 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-blue-600 transition"
+          >
+            Dashboard
+          </button>
+        )}
 
-    <main className="relative flex min-h-screen flex-col items-center justify-center bg-gradient-to-r from-gray-100 to-white p-8"
-      style={{ backgroundImage: `url('/images/createbg.jpg')`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-
-      <div className="absolute top-4 right-4">
-        <button
-          onClick={handleDashboard}
-          className="bg-blue-500 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-blue-600 transition"
-        >
-          Dashboard
-        </button>
+        {/* Logout button always visible */}
         <button
           onClick={handleLogout}
-          className="bg-red-500 text-white px-6 py-3 rounded-md hover:bg-red-600 transition duration-300 ml-3"
+          className="bg-red-500 text-white px-6 py-3 rounded-md hover:bg-red-600 transition duration-300"
         >
           Logout
         </button>
-
       </div>
 
       {/* Logo and title */}
@@ -90,10 +94,7 @@ export default function Home() {
         <h1 className="text-4xl font-bold mt-4 text-white">Macro News Portal</h1>
       </div>
 
-
-
-
-      {/* search */}
+      {/* Search */}
       <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex mb-8">
         <div className="flex w-full justify-center mb-8 lg:mb-0">
           <input
@@ -106,7 +107,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Modal for displaying full news content */}
+      {/* Modal */}
       {selectedNews && (
         <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-gray-900 bg-opacity-60">
           <div className="w-full max-w-2xl bg-white p-7 rounded-lg shadow-lg relative top-4 md:top-16 lg:top-16">
@@ -126,10 +127,13 @@ export default function Home() {
         </div>
       )}
 
-      {/* Display news cards */}
+      {/* News cards */}
       <div className="grid gap-8 text-center lg:grid-cols-3 lg:text-left w-full max-w-5xl">
         {filteredNews.map((item) => (
-          <div key={item._id} className="group rounded-lg border border-gray-200 bg-white p-6 transition-all shadow-md hover:shadow-lg">
+          <div
+            key={item._id}
+            className="group rounded-lg border border-gray-200 bg-white p-6 transition-all shadow-md hover:shadow-lg"
+          >
             {item.imageUrl && (
               <Image
                 src={item.imageUrl}
