@@ -23,7 +23,7 @@ export default function Home() {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const response = await axios.get('https://newsportalbackend-ebcrf9fhcqasbpez.southeastasia-01.azurewebsites.net/news');
+        const response = await axios.get('http://localhost:8070/news');
         setNews(response.data);
       } catch (error) {
         console.error('Error fetching news:', error);
@@ -58,6 +58,11 @@ export default function Home() {
     router.push('/user/dashboard');
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    router.push('/');
+  };
+
   return (
 
     <main className="relative flex min-h-screen flex-col items-center justify-center bg-gradient-to-r from-gray-100 to-white p-8"
@@ -70,6 +75,13 @@ export default function Home() {
         >
           Dashboard
         </button>
+        <button
+          onClick={handleLogout}
+          className="bg-red-500 text-white px-6 py-3 rounded-md hover:bg-red-600 transition duration-300 ml-3"
+        >
+          Logout
+        </button>
+
       </div>
 
       {/* Logo and title */}
