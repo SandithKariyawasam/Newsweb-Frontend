@@ -42,8 +42,7 @@ export default function EditNews() {
     setError('');
     setSuccess('');
     try {
-      // await axios.put(`http://localhost:8070/news/update/${id}`, { title, content });
-      await axios.put(`https://newsportalbackend-ebcrf9fhcqasbpez.southeastasia-01.azurewebsites.net/news/update/${id}`, { title, content });
+      await axios.put(`https://newsweb-3d1bbc5175be.herokuapp.com/news/update/${id}`, { title, content });
       setSuccess('News updated successfully!');
       setTimeout(() => {
         router.push('/user/dashboard');
