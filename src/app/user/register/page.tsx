@@ -23,7 +23,7 @@ export default function AdminRegister() {
     }
 
     try {
-      const response = await axios.post('http://localhost:8070/users/register', {
+      const response = await axios.post('https://newsweb-3d1bbc5175be.herokuapp.com/users/register', {
         username,
         password,
         captchaToken,

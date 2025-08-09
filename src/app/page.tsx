@@ -21,8 +21,10 @@ export default function AdminLogin() {
       return;
     }
 
+// http://localhost:8070/users/login
+
     try {
-      const response = await axios.post('http://localhost:8070/users/login', {
+      const response = await axios.post('https://newsweb-3d1bbc5175be.herokuapp.com/users/login', {
         username,
         password,
         captchaToken, // send CAPTCHA token to backend

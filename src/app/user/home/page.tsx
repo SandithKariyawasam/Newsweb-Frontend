@@ -24,7 +24,7 @@ export default function Home() {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const response = await axios.get('http://localhost:8070/news');
+        const response = await axios.get('https://newsweb-3d1bbc5175be.herokuapp.com/news');
 
         // Sort by createdAt DESC so latest is first
         const sortedNews = response.data.sort(

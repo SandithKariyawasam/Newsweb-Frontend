@@ -32,7 +32,7 @@ export default function UserDashboard() {
 
   const fetchNews = async () => {
     try {
-      const response = await axios.get('http://localhost:8070/news');
+      const response = await axios.get('https://newsweb-3d1bbc5175be.herokuapp.com/news');
       setNews(response.data);
     } catch (error) {
       console.error('Error fetching news:', error);

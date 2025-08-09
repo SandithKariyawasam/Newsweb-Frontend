@@ -49,7 +49,7 @@ export default function CreateNews() {
         imageUrl = data.secure_url;
       }
 
-      await axios.post('http://localhost:8070/news/add', { title, content, imageUrl });
+      await axios.post('https://newsweb-3d1bbc5175be.herokuapp.com/news/add', { title, content, imageUrl });
       setSuccess('News created successfully!');
       setTitle('');
       setContent('');
