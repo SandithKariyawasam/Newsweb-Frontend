@@ -115,7 +115,7 @@ export default function AdminLogin() {
           </button>
 
           <div className="flex flex-col items-center justify-center mt-6">
-            <p className="mb-4">If you don't have an account, click here</p>
+            <p className="mb-4">If you don&apos;t have an account, click here</p>
             <button
               onClick={handleRegister}
               className="w-full bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-red-600 transition"

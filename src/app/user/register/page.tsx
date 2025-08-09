@@ -4,6 +4,7 @@ import { useState, useRef } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import ReCAPTCHA from 'react-google-recaptcha';
+import type { AxiosError } from 'axios';
 
 export default function AdminRegister() {
   const [username, setUsername] = useState('');
@@ -32,9 +33,10 @@ export default function AdminRegister() {
         // Optionally show success message here
         router.push('/'); // Redirect to login page
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const axiosError = error as AxiosError<{ message?: string }>;
       setError(
-        error.response?.data?.message || 'Registration failed. Please try again.'
+        axiosError.response?.data?.message || 'Registration failed. Please try again.'
       );
       recaptchaRef.current?.reset(); // Reset CAPTCHA on failure
       setCaptchaToken(null);
