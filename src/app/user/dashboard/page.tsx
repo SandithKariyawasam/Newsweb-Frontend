@@ -85,7 +85,7 @@ export default function UserDashboard() {
         }
 
         // Update news with new or existing image URL
-        await axios.put(`http://localhost:8070/news/update/${editingNews._id}`, { title, content, imageUrl: updatedImageUrl });
+        await axios.put(`https://newsweb-3d1bbc5175be.herokuapp.com/news/update/${editingNews._id}`, { title, content, imageUrl: updatedImageUrl });
         setSuccess('News updated successfully!');
         fetchNews();
         setEditingNews(null);
