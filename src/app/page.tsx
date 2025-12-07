@@ -24,7 +24,7 @@ export default function AdminLogin() {
 // http://localhost:8070/users/login
 
     try {
-      const response = await axios.post('https://166720c8-b530-49b2-b541-bf6a0cec22d8-dev.e1-us-east-azure.choreoapis.dev/default/newsweb/v1.0/users/login', {
+      const response = await axios.post('https://newsweb-backend.vercel.app/users/login', {
         username,
         password,
         captchaToken, // send CAPTCHA token to backend
@@ -124,6 +124,7 @@ export default function AdminLogin() {
             >
               Register
             </button>
+            <p className="mb-4">Admin:swkariyawasam Pw:abcd1234</p>
           </div>
         </form>
       </div>

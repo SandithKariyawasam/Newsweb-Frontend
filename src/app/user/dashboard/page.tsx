@@ -32,7 +32,7 @@ export default function UserDashboard() {
 
   const fetchNews = async () => {
     try {
-      const response = await axios.get('https://166720c8-b530-49b2-b541-bf6a0cec22d8-dev.e1-us-east-azure.choreoapis.dev/default/newsweb/v1.0/news');
+      const response = await axios.get('https://newsweb-backend.vercel.app/news');
       setNews(response.data);
     } catch (error) {
       console.error('Error fetching news:', error);
@@ -85,7 +85,7 @@ export default function UserDashboard() {
         }
 
         // Update news with new or existing image URL
-        await axios.put(`https://166720c8-b530-49b2-b541-bf6a0cec22d8-dev.e1-us-east-azure.choreoapis.dev/default/newsweb/v1.0/news/update/${editingNews._id}`, { title, content, imageUrl: updatedImageUrl });
+        await axios.put(`https://newsweb-backend.vercel.app/v1.0/news/update/${editingNews._id}`, { title, content, imageUrl: updatedImageUrl });
         setSuccess('News updated successfully!');
         fetchNews();
         setEditingNews(null);

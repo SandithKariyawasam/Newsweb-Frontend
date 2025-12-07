@@ -49,7 +49,7 @@ export default function CreateNews() {
         imageUrl = data.secure_url;
       }
 
-      await axios.post('https://166720c8-b530-49b2-b541-bf6a0cec22d8-dev.e1-us-east-azure.choreoapis.dev/default/newsweb/v1.0/news/add', { title, content, imageUrl });
+      await axios.post('https://newsweb-backend.vercel.app/news/add', { title, content, imageUrl });
       setSuccess('News created successfully!');
       setTitle('');
       setContent('');

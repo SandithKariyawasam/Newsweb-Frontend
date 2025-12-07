@@ -23,7 +23,7 @@ const NewsTable: React.FC<Props> = ({ news, fetchNews, onEditNews }) => {
     const confirmed = confirm('Are you sure you want to delete this news item?');
     if (confirmed) {
       try {
-        await axios.delete(`https://166720c8-b530-49b2-b541-bf6a0cec22d8-dev.e1-us-east-azure.choreoapis.dev/default/newsweb/v1.0/news/delete/${id}`);
+        await axios.delete(`https://newsweb-backend.vercel.app/news/delete/${id}`);
         fetchNews();
       } catch (error) {
         console.error('Error deleting news:', error);

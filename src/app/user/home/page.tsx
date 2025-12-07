@@ -24,7 +24,7 @@ export default function Home() {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const response = await axios.get('https://166720c8-b530-49b2-b541-bf6a0cec22d8-dev.e1-us-east-azure.choreoapis.dev/default/newsweb/v1.0/news');
+        const response = await axios.get('https://newsweb-backend.vercel.app/news');
 
         // Sort by createdAt DESC so latest is first
         const sortedNews = response.data.sort(
