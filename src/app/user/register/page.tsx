@@ -23,7 +23,7 @@ export default function AdminRegister() {
     }
 
     try {
-      const response = await axios.post('https://newsweb-3d1bbc5175be.herokuapp.com/users/register', {
+      const response = await axios.post('https://166720c8-b530-49b2-b541-bf6a0cec22d8-dev.e1-us-east-azure.choreoapis.dev/default/newsweb/v1.0/users/register', {
         username,
         password,
         captchaToken,

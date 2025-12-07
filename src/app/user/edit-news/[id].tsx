@@ -28,7 +28,7 @@ export default function EditNews() {
 
   const fetchNews = async (newsId: string) => {
     try {
-      const response = await axios.get(`https://newsweb-3d1bbc5175be.herokuapp.com/news/${newsId}`);
+      const response = await axios.get(`https://166720c8-b530-49b2-b541-bf6a0cec22d8-dev.e1-us-east-azure.choreoapis.dev/default/newsweb/v1.0/news/${newsId}`);
       setTitle(response.data.title);
       setContent(response.data.content);
     } catch (error) {
@@ -42,7 +42,7 @@ export default function EditNews() {
     setError('');
     setSuccess('');
     try {
-      await axios.put(`https://newsweb-3d1bbc5175be.herokuapp.com/news/update/${id}`, { title, content });
+      await axios.put(`https://166720c8-b530-49b2-b541-bf6a0cec22d8-dev.e1-us-east-azure.choreoapis.dev/default/newsweb/v1.0/news/update/${id}`, { title, content });
       setSuccess('News updated successfully!');
       setTimeout(() => {
         router.push('/user/dashboard');
